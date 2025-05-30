@@ -1,0 +1,33 @@
+name: call_detector_plugin
+description: "A Flutter plugin for detecting incoming, outgoing, and active calls on Android and iOS devices"
+version: 1.0.0
+homepage: https://github.com/javlon92/call_detector_plugin
+repository: https://github.com/javlon92/call_detector_plugin
+issue_tracker: https://github.com/javlon92/call_detector_plugin/issues
+
+topics: [call_detector, call_detecting, call_tracking, call_handler, phone_detector]
+
+platforms:
+  android:
+  ios:
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.example.call_detector_plugin
+        pluginClass: CallDetectorPlugin
+      ios:
+        pluginClass: CallDetectorPlugin
