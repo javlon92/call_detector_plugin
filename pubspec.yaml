@@ -5,7 +5,12 @@ homepage: https://github.com/javlon92/call_detector_plugin
 repository: https://github.com/javlon92/call_detector_plugin
 issue_tracker: https://github.com/javlon92/call_detector_plugin/issues
 
-topics: [call_detector, call_detecting, call_tracking, call_handler, phone_detector]
+topics:
+  - call-detector
+  - call-detecting
+  - call-tracking
+  - call-handler
+  - phone-detector
 
 platforms:
   android:
@@ -13,6 +18,7 @@ platforms:
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
