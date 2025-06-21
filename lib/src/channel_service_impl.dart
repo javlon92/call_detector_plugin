@@ -1,17 +1,19 @@
-part of 'src.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'channel_service.dart';
+import 'call_detector_constants.dart';
 
-class _CallChannelServiceImpl implements _CallChannelService {
-  static final MethodChannel _methodChannel = MethodChannel(_ChannelConstants.callDetectorMethod.channel);
-  static final EventChannel _eventChannel = EventChannel(_ChannelConstants.callDetectorEvent.channel);
+class CallChannelServiceImpl implements CallChannelService {
+  static final MethodChannel _methodChannel = MethodChannel(ChannelConstants.callDetectorMethod.channel);
+  static final EventChannel _eventChannel = EventChannel(ChannelConstants.callDetectorEvent.channel);
 
-  const _CallChannelServiceImpl();
-
+  const CallChannelServiceImpl();
 
   /// {@macro get_current_call_status}
   @override
   Future<bool> getCurrentCallStatus() async {
     try {
-      return await _methodChannel.invokeMethod<bool>(_MethodConstants.getCurrentStatus.method) ?? false;
+      return await _methodChannel.invokeMethod<bool>(MethodConstants.getCurrentStatus.method) ?? false;
     } catch (e) {
       return false;
     }

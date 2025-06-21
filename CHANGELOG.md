@@ -1,3 +1,8 @@
+## 1.0.1 - 21 June 2025
+
+* **Robustness & Testability:** Included comprehensive unit tests to ensure the reliability and correctness of core logic.
+* **Compatibility:** Designed and tested for Dart SDK `>=3.0.0 <4.0.0` and Flutter `>=3.10.0`.
+
 ## 1.0.0 - 9 June 2025
 
 * **Initial Release of CallDetector Plugin:**
@@ -7,3 +12,4 @@
     * **Multiple Subscribers Support:** Utilized a `broadcast` stream to allow multiple components within an application to receive call updates simultaneously.
     * **Last Known Status:** Enabled the retrieval of the last known call status, ensuring new subscribers immediately get up-to-date information.
     * **Integration Mixins:** Provided convenient mixins (`CallDetectorMixin`) for seamless integration with Bloc/Cubit, StatefulWidget, and StatelessWidget, simplifying call status management within various architectural patterns.
+* **Compatibility:** Designed and tested for Dart SDK `>=3.0.0 <4.0.0` and Flutter `>=3.10.0`.

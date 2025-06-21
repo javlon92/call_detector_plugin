@@ -1,29 +1,37 @@
 part of 'src.dart';
 
 mixin _CallDetectSubscriptionMixin {
-  StreamController<bool>? _controller;
-  StreamSubscription<bool>? _subscription;
-  bool? _lastValue;
-  final _CallChannelService _channelService = const _CallChannelServiceImpl();
+  @protected
+  @visibleForTesting
+  StreamController<bool>? controller;
+  @protected
+  @visibleForTesting
+  StreamSubscription<bool>? subscription;
+  @protected
+  @visibleForTesting
+  bool? lastValue;
+  @protected
+  @visibleForTesting
+  CallChannelService channelService = const CallChannelServiceImpl();
 
   /// {@macro last_call_status}
-  bool get _lastCallStatus => _lastValue ?? false;
+  bool get _lastCallStatus => lastValue ?? false;
 
   set _lastCallStatus(bool newValue) {
-    _lastValue = newValue;
+    lastValue = newValue;
   }
 
   /// {@macro is_stream_active}
-  bool get _isStreamActive => !(_controller?.isClosed ?? true);
+  bool get _isStreamActive => !(controller?.isClosed ?? true);
 
   /// {@macro has_listeners}
-  bool get _hasListeners => _controller?.hasListener ?? false;
+  bool get _hasListeners => controller?.hasListener ?? false;
 
   /// {@macro call_detect_stream}
   Stream<bool> get _streamBroadcast {
     return Stream<bool>.multi(
       (subscriber) {
-        _controller ??= StreamController<bool>.broadcast(
+        controller ??= StreamController<bool>.broadcast(
           onListen: _startListening,
           onCancel: () async {
             await _stopListening();
@@ -31,15 +39,15 @@ mixin _CallDetectSubscriptionMixin {
           sync: true,
         );
 
-        final subscription = _controller!.stream.listen(
+        final subscription = controller!.stream.listen(
           subscriber.add,
           onError: subscriber.addError,
           onDone: subscriber.close,
           cancelOnError: false,
         );
 
-        /// Passing [_lastValue] only to a new subscriber - when a new listener is connected.
-        if (_lastValue != null) {
+        /// Passing [lastValue] only to a new subscriber - when a new listener is connected.
+        if (lastValue != null) {
           subscriber.add(_lastCallStatus);
         }
 
@@ -52,7 +60,7 @@ mixin _CallDetectSubscriptionMixin {
   }
 
   void _startListening() {
-    _subscription ??= _channelService.getCallDetectStream().listen(
+    subscription ??= channelService.getCallDetectStream().listen(
       _safeAdd,
       onError: _safeAddError,
       onDone: () async {
@@ -64,36 +72,36 @@ mixin _CallDetectSubscriptionMixin {
 
   Future<void> _stopListening() async {
     try {
-      await _subscription?.cancel();
+      await subscription?.cancel();
     } on PlatformException catch (e, s) {
       if ((e.message ?? '').contains('No active stream to cancel')) {
         return;
       }
       _safeAddError(e, s);
     } finally {
-      _subscription = null;
-      _lastValue = null;
+      subscription = null;
+      lastValue = null;
     }
   }
 
   Future<void> _closeController() async {
     if (_isStreamActive) {
-      await _controller?.close();
-      _controller = null;
-      _lastValue = null;
+      await controller?.close();
+      controller = null;
+      lastValue = null;
     }
   }
 
   void _safeAdd(bool callStatus) {
-    _lastValue = callStatus;
+    lastValue = callStatus;
     if (_isStreamActive) {
-      _controller!.add(callStatus);
+      controller!.add(callStatus);
     }
   }
 
   void _safeAddError(Object error, [StackTrace? stackTrace]) {
     if (_isStreamActive) {
-      _controller!.addError(error, stackTrace);
+      controller!.addError(error, stackTrace);
     }
   }
 }
