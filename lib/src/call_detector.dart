@@ -56,5 +56,5 @@ class CallDetector with _CallDetectSubscriptionMixin implements _Detector {
 
   /// {@macro get_current_call_status}
   @override
-  Future<bool> getCurrentCallStatus() async => _lastCallStatus = await _channelService.getCurrentCallStatus();
+  Future<bool> getCurrentCallStatus() async => _lastCallStatus = await channelService.getCurrentCallStatus();
 }

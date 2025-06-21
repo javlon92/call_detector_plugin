@@ -41,7 +41,7 @@ class AudioFocusListener(
         abandonFocus()
         pollingJob?.cancel()
         pollingJob = null
-        job.cancel()
+        if (audioFocusState.isNotLoss) job.cancel()
     }
 
     private fun reportCallStatus() {
@@ -69,7 +69,7 @@ class AudioFocusListener(
     }
 
     private fun onFocusChanged() {
-        if (audioFocusState.isLossTransient && callMode.isRingingOrNormal || audioFocusState.isUnknown) { // Входящий, исходящий вызов
+        if (audioFocusState.isLossTransient && callMode.isRingingOrNormal || audioFocusState.isUnknown) { // Входящий, исходящий вызов в режиме ожидания
             startGetCallStatusPolling(pollIntervalMs = 1000, maxAttempts = Int.MAX_VALUE)
         } else if (audioFocusState.isLoss) { // Потеря фокуса
             restartListening()
@@ -108,11 +108,10 @@ class AudioFocusListener(
 
         if (isGranted) {
             audioFocusState = AudioFocusState.GAIN
-            onFocusChanged()
         } else {
             audioFocusState = AudioFocusState.UNKNOWN
-            onFocusChanged()
         }
+        onFocusChanged()
         return isGranted
     }
 
